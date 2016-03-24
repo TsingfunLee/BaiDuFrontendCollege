@@ -1,0 +1,186 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background-color: lavender;
+}
+/*导航栏*/
+.nav{
+    width:100%;
+    height:72px;
+    background-color: cornflowerblue;
+    display: table;
+}
+.nav h1{
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    left: 70px;
+}
+.nav img{
+    position:absolute;
+    width: 50px;
+    float: left;
+    left: 20px;
+}
+.nav ul{
+    position:relative;
+    float: right;
+    height: 20px;
+    margin-top: -15px;
+    top:36px;
+}
+.nav li{
+    margin-right: 20px;
+    float: left;
+    list-style: none;
+}
+.nav li a:hover{
+    color: snow;
+}
+/*文章*/
+.article{
+    width:90%;
+    margin: 30px auto;
+    padding:35px 20px;
+    background-color: snow;
+    box-shadow: 5px 5px 5px darkgrey;
+}
+.article h3{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: dimgray;
+}
+.article .author{
+    margin-bottom: 20px;
+    color: dimgray;
+    font-size: 14px;
+}
+.article .passage{
+    text-indent: 2em;
+}
+.article .passage img{
+    clear: both;
+    display: block;
+    margin:15px auto;
+}
+.article ul{
+    list-style: none;
+}
+.article ol{
+    position: relative;
+    left: 40px;
+    margin-bottom: 20px;
+}
+.article table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.article table td{
+    border-color: lavender;
+    border-style: solid;
+    border-width:1px;
+    padding:2px 5px;
+}
+.article table th{
+    border-color: lavender;
+    border-style: solid;
+    border-width:1px;
+    background-color: slategrey;
+    text-align: left;
+    padding:2px 5px;
+}
+article .row{
+    background-color: lavender;
+    font-weight: bold;
+}
+/*图片*/
+.article .image{
+    width: 420px;
+    border: solid gainsboro;
+    margin: 20px;
+    padding: 30px 20px;
+}
+.article .image img{
+    width: 400px;
+    height: auto;
+    clear: both;
+    display: block;
+    margin: auto;
+}
+.article .image p{
+    margin-bottom: 20px;
+    text-align: center;
+}
+/*侧栏*/
+aside{
+    margin-top: 50px;
+}
+aside .aside-title{
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    color: black;
+    border-left: solid lightgray;
+ }
+aside form{
+    margin: 20px;
+}
+aside form span{
+    display: inline-block;
+    position: absolute;
+    right: 70%;
+    text-align: right;
+    padding-top: 5px;
+}
+aside form .input{
+    position:relative;
+    left: 30%;
+    display: inline-block;
+    padding:5px;
+    magin-top:10px;
+    margin-bottom: 15px;
+}
+aside form .tip{
+    position: relative;
+    left:30%;
+    display: inline-block;
+    padding-bottom: 30px;
+    color: darkgrey;
+}
+aside form .option1{
+    margin-right: 5px;
+}
+aside form .option2{
+    margin-right: 5px;
+    margin-left: 15px;
+}
+aside form .submit{
+    width: 100%;
+    padding:5px;
+    border-radius: 15px;
+    border-style: none;
+    background-color: lightblue;
+    font-size: 20px;
+    color: snow;
+}
+aside form .submit:hover{
+    background-color: dodgerblue;
+}
+/*底部*/
+footer{
+    width:100%;
+    height:72px;
+    background-color: black;
+    display: table;
+}
+footer p{
+    text-align: center;
+    color: snow;
+    font-size: 14px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
