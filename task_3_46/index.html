@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A star pathfinding</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="start-page page">
+    <h2>王牌特工</h2>
+    <h4>游戏说明</h4>
+    <p>点击或触摸使<span class="role"></span>主角（特工）到达指定地点，获取<span class="target"></span>机密文件（目标）</p>
+    <input class="button begin" type="button" value="开始" id="begin-bt">
+</div>
+<div class="bg page"></div>   <!--背景遮罩-->
+
+<canvas id="grid">
+    <p>浏览器不支持！</p>
+</canvas>
+<canvas id="game-stage">
+    <p>浏览器不支持！</p>
+</canvas>
+</body>
+<script src="block.js"></script>
+<script src="role.js"></script>
+<script src="target.js"></script>
+<script src="astar.js"></script>
+<script src="game.js"></script>
+</html>

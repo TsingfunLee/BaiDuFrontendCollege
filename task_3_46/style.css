@@ -1,0 +1,87 @@
+html,body,div,h2,h4,p,span,input{
+    margin: 0px;
+    padding: 0px;
+    font-family: "Microsoft YaHei UI";
+    line-height: 1.4em;
+    font-size: 16px;
+}
+input[type="button"]::-moz-focus-inner{
+    border: none;
+    padding: 0px;
+}
+
+div,canvas{
+    width: 720px;
+    height: 1280px;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -360px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.start-page{
+    background-color: transparent;
+    text-align: center;
+    z-index: 4;
+}
+.bg{
+    background-color: white;
+    opacity: 0.8;
+    z-index: 3;
+}
+
+.start-page h2{
+    margin-top: 40%;
+    font-size: 5em;
+}
+
+.start-page h4{
+    margin: 10% 0 10% 0;
+    font-size: 3.5em;
+}
+
+.button{
+    width: 65%;
+    height: 15%;
+    font-size: 4.5em;
+    margin-top: 20%;
+    text-align: center;
+    text-indent: 1em;
+    letter-spacing: 1em;
+}
+
+p{
+    font-size: 3.2em;
+}
+
+span{
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.role{
+    width: 40px;
+    height: 40px;
+    border: solid green;
+    background-color: green;
+    border-radius: 40px;
+    display: inline-flex;
+}
+
+.target{
+    width: 0px;
+    height: 0px;
+    border-top: solid yellow 34px;
+    border-left: solid transparent 20px;
+    border-right: solid transparent 20px;
+    display: inline-flex;
+}
+
+/*Canvas*/
+.game-stage{
+    /*z-index: ;*/
+}
+.grid{
+    /*z-index: 1;*/
+}
