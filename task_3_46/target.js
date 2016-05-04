@@ -10,17 +10,17 @@ var targetobj = function(){
 }
 
 targetobj.prototype.init = function(){
-    this.x = w/2;
+    this.x = canW/2;
     this.y = 1200;
-    this.sideLength = 30;
+    this.sideLength = 60;
 }
 
 targetobj.prototype.draw = function(){
-    var del = this.sideLength/2*1.732;   // half height of triangle
+    var del = this.sideLength/4*1.7;   // half height of triangle
     game_ctx.fillStyle = "yellow";
     game_ctx.beginPath();
     game_ctx.moveTo(this.x-this.sideLength/2,this.y-del);
-    game_ctx.lineTo(this.x+this.sideLength,this.y-del);
+    game_ctx.lineTo(this.x+this.sideLength/2,this.y-del);
     game_ctx.lineTo(this.x,this.y+del);
     game_ctx.fill()
 }

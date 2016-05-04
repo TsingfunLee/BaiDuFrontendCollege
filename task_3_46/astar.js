@@ -6,168 +6,76 @@
  * based on javascript-astar https://github.com/bgrins/javascript-astar
  **/
 
-var open = [];// 定义open列表，储存待检查节点的坐标
-var close = [];// 定义close列表，储存已检查过的节点
-var path = [];// 定义路径队列，储存最终生成的路径
-
-var nowX;// 记录role当前坐标
-var nowY;// 记录role当前坐标
-var timer;//定时器
-
-function openIn(node){//定义open入队函数
-    open.push(node);
+var astar = function(){
+    var open = [];
+    var close = [];
 }
 
-function openOut(node){//定义open出队函数
-    for(var i = 0 ; i < open.length ; i ++){
-        if(open[i].xIndex == node.xIndex && open[i].yIndex == node.yIndex){
-            open.splice(i,1);
-            break;
+astar.prototype.search = function(){
+
+}
+
+var Graph = function(gridL){  // parameter is the length of one grid
+    this.grid = [];
+    this.gridL = gridL;
+    this.hGridNum = Math.floor(canW/this.gridL);
+    this.vGridNum = Math.floor(canH/this.gridL);
+    this.totalNum = this.hGridNum*this.vGridNum;
+    for (var i = 0;i<this.hGridNum;i++){
+        for (var j = 0;j<this.vGridNum;j++){
+            var node = new gridNode(i*this.gridL,j*this.gridL,parseInt(Math.random()*10%2));
+            this.grid.push(node);
+        }
+    }
+}
+Graph.prototype.draw = function(){
+    // draw grid
+    for (var i = 0;i<=this.hGridNum;i++){
+        for (var j = 0;j<=this.vGridNum;j++){
+            grid_ctx.beginPath();
+            grid_ctx.strokeStyle = "#f6bf19";
+            grid_ctx.moveTo(0,j*this.gridL);
+            grid_ctx.lineTo(canW,j*this.gridL);
+            grid_ctx.stroke();
+        }
+        grid_ctx.beginPath();
+        grid_ctx.strokeStyle = "#f6bf19";
+        grid_ctx.moveTo(i*this.gridL,0);
+        grid_ctx.lineTo(i*this.gridL,canH);
+        grid_ctx.stroke();
+    }
+
+    // draw blocks
+    for (var i = 0; i < this.totalNum; i++) {
+        if (this.grid[i].block === 1){
+            game_ctx.beginPath();
+            game_ctx.fillStyle = "#402a03";
+            game_ctx.rect(this.grid[i].x, this.grid[i].y, this.gridL, this.gridL);
+            game_ctx.fill();
+        }
+    }
+    // 清除一部分block，否则生成的block过多，无法通过
+    // 根据关卡难易，清除block的多少
+    for (var i = 0;i<this.totalNum*(1/level);i++){
+        var j = parseInt(Math.random()*this.totalNum)
+        game_ctx.clearRect(this.grid[j].x,this.grid[j].y,this.gridL,this.gridL)
+        this.grid[j].block = 0;
+    }
+}
+// 获得可以行走的grid
+Graph.prototype.movableGrid = function(){
+    this.movableGridNum = 0;
+    for (var i = 0;i<this.totalNum;i++){
+        if (this.grid[i].block === 0){
+            this.movableGridNum++;
+            console.log(this.movableGridNum)
+            return this.grid[i];
         }
     }
 }
 
-function closeIn(node){//定义close入队函数
-    close.push(node);
-}
-
-function pathIn(node){//定义path入队函数
-    path.push(node);
-}
-
-function pathOut(node){//定义path出队函数
-    for(var i = 0 ; i < path.length ; i ++){
-        if(path[i].xIndex == node.xIndex && path[i].yIndex == node.yIndex){
-            path.splice(i,1);
-            break;
-        }
-    }
-}
-
-function createNode(x,y,targetX,targetY){ // 定义节点函数
-    var node = {};
-    node.xIndex = x;
-    node.yIndex = y;
-    node.G = (nowX - x)*(nowX - x) + (nowY - y)*(nowY - y);
-    node.H = (targetX - x)*(targetX - x) + (targetY - y)*(targetY - y);
-    node.F = node.G + node.H;
-
-    return node;
-}
-
-function getNode(){ // 定义在open队列中取F值最小的节点的函数
-    var index = 0;
-    var min = open[0];
-
-    for(var i = 0 ; i < open.length ; i++){
-        if(open[i].F <= min){
-            min = open[i].F;
-            index = i;
-        }
-    }
-
-    return open[index];
-}
-
-function isInClose(x,y){ //定义检查节点是否在close队列中的函数
-    for(var i = 0 ; i < close.length ; i ++){
-        if(close[i].xIndex == x && close[i].yIndex == y){
-            return true;
-        }
-    }
-    return false;
-}
-
-//function inspect(x,y){ // 定义检查节点是否可以进入open队列的函数
-//    if(x >= 0 && x < Math.ceil(w/n) && y >= 0 && y < Math.ceil(h/n) && map[y][x] && !isInClose(x,y)){
-//        return true;
-//    }else{
-//        return false;
-//    }
-//}
-
-function selectNode(node,targetX,targetY){//定义搜索下一节点的函数
-
-    var bool = false;
-
-    if(!isInClose(node.xIndex - 1,node.yIndex)){
-        openIn(createNode(node.xIndex - 1,node.yIndex,targetX,targetY));
-        bool = true;
-
-    }
-
-    if(!isInClose(node.xIndex + 1,node.yIndex)){
-        openIn(createNode(node.xIndex + 1,node.yIndex,targetX,targetY));
-        bool = true;
-    }
-
-    if(!isInClose(node.xIndex,node.yIndex-1)){
-        openIn(createNode(node.xIndex,node.yIndex - 1,targetX,targetY));
-        bool = true;
-    }
-
-    if(!isInClose(node.xIndex,node.yIndex+1)){
-        openIn(createNode(node.xIndex,node.yIndex + 1,targetX,targetY));
-        bool = true;
-    }
-
-    if(!bool){
-        pathOut(node);
-    }
-}
-
-function findPath(targetX,targetY){ // 定义执行函数，生成path路径
-    nowX = role.x;
-    nowY = role.y;
-    var node = createNode(nowX,nowY,targetX,targetY);
-
-    if(!map[targetX][targetY]){
-        return false;
-    }
-
-    openIn(node);
-    while(open){
-        if(node.xIndex == targetX && node.yIndex == targetY){
-            pathIn(node);
-            return true;
-        }else{
-            openOut(node);
-            closeIn(node);
-            selectNode(node,targetX,targetY);
-            node = getNode();
-            pathIn(node);
-        }
-    }
-
-    return false;
-}
-
-function moveTo(event){// 定义移动函数，用定时器控制role坐标更新
-    var event = event || window.event;
-
-    clearInterval(timer);
-    //open = [];
-    //close = [];
-    //path = [];
-
-    if(findPath(Math.abs(Math.floor((event.clientX - w)/n)),Math.abs(Math.floor((event.clientY - h)/n)))){
-        var i = 0;
-
-        timer = setInterval(function(){
-            role.move(path[i].xIndex,path[i].yIndex);
-            if(Math.abs(path[i].xIndex*n - target.x) < n && Math.abs(path[i].yIndex*n - target.y) < n){
-                path = [];
-                //reset();
-                clearInterval(timer);
-            }
-
-            i ++;
-
-            if(i >= path.length){
-                path = [];
-                clearInterval(timer);
-            }
-        },deltaTime);
-    }
-
+var gridNode = function(x,y,block){
+    this.x = x;
+    this.y = y;
+    this.block = block;    // block 代表有无障碍，0  无 ，1  有
 }
