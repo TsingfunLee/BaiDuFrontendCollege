@@ -14,10 +14,10 @@ div,canvas{
     width: 720px;
     height: 1280px;
     position: absolute;
-    top: 0px;
+    top: 50%;
     left: 50%;
     margin-left: -360px;
-    padding: 20px;
+    margin-top: -640px;
     box-sizing: border-box;
 }
 
