@@ -2,6 +2,10 @@
  * Created by 李庆芳 on 2016/5/3.
  */
 
+/**
+ * role object
+ */
+
 // create the role class
 var roleobj = function(){
     this.x;

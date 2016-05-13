@@ -2,6 +2,10 @@
  * Created by 李庆芳 on 2016/5/3.
  */
 
+/**
+ *  target Object
+ */
+
 // create target class
 var targetobj = function(){
     this.x;
