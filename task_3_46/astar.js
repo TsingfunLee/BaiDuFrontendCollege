@@ -40,7 +40,7 @@ var astar = function (star, end, graph, ctx) {
         }
         open = [];
         open = graph.getNeighbors(current);
-        //graph.drawOpen(ctx, open);
+        graph.drawOpen(ctx, open);
         console.log(open)
         if (current.x != end.x || current.y != end.y) {
             this.search();
@@ -129,7 +129,7 @@ Graph.prototype.draw = function (level) {
     // 清除一部分block，否则生成的block过多，无法通过
     // 根据关卡难易，清除block的多少
     for (var i = 0; i < this.hGridNum * (1 / level); i++) {
-        for (var j = 0; j < this.vGridNum * (1 / level); j++) {
+        for (var j = 0; j < this.vGridNum ; j++) {
             var iIndex = parseInt(Math.random() * this.hGridNum)
             var jIndex = parseInt(Math.random() * this.vGridNum)
             game_ctx.clearRect(this.grid[iIndex][jIndex].x, this.grid[iIndex][jIndex].y, this.gridL, this.gridL)
