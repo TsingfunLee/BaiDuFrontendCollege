@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>没有土哥的讨论组</title>
+    <style>
+        body {
+            text-align: center;
+            padding-top: 200px;
+            font-family: "Microsoft YaHei UI";
+        }
+
+        .button {
+            background-color: snow;
+            border: 1px solid darkgray;
+            border-radius: 4px;
+            box-shadow: 0px 0px 2px darkgray;
+        }
+
+        .button:hover {
+            background-color: darkgray;
+        }
+
+        h2 {
+            -webkit-transition: padding-left 1s;
+            -moz-transition: padding-left 1s;
+            -ms-transition: padding-left 1s;
+            -o-transition: padding-left 1s;
+            transition: padding-left 1s;
+        }
+
+        h2:hover {
+            padding-left: 80px;
+        }
+
+        #queue {
+            position: relative;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #queue div {
+            background-color: red;
+            width: 50px;
+            height: 50px;
+            float: left;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>队列模拟</h2>
+<input type="text" id="input" value="">
+<input type="button" value="左侧入" class="button" onclick="enterLeft()">
+<input type="button" value="右侧入" class="button" onclick="enterRight()">
+<input type="button" value="左侧出" class="button" onclick="outLeft()">
+<input type="button" value="右侧出" class="button" onclick="outRight()">
+<div id="queue"></div>
+<script>
+    var input = document.getElementById('input');
+    var queueElement = document.getElementById('queue');
+    var queue = [];
+
+    function enterLeft() {
+        var number = input.value;
+        if (isNumber(number)) {
+            queue.splice(0, 0, number);
+
+            createDiv(number);
+        }
+    }
+
+    function enterRight() {
+        var number = input.value;
+        if (isNumber(number)) {
+            queue.push(number);
+
+            createDiv(number);
+        }
+    }
+
+    function outLeft() {
+        var number = queue.splice(0, 1);
+        alert(number);
+        removeDiv(number);
+    }
+
+    function outRight() {
+        var number = queue.pop();
+        alert(number);
+        removeDiv(number);
+    }
+
+    function isNumber(string) {
+        var pattern = /^\d+(\.\d+)*$/;
+        if (pattern.test(string)){
+             return true;
+        }else{
+            alert("请输入数字！");
+            return false;
+        }
+    }
+
+    function createDiv(number) {
+        var div = document.createElement('div');
+        div.addEventListener('click', function () {
+            queueElement.removeChild(div);
+            queue.splice(parseInt(div.innerHTML - 1), 1);
+        }, false);
+
+        queueElement.appendChild(div);
+        paint();
+    }
+
+    function removeDiv(number) {
+        var length = queueElement.childElementCount;
+        for (var i = 0; i < length; ++i) {
+            var node = queueElement.childNodes.item(i);
+            if (node.innerHTML == number) {
+                queueElement.removeChild(node);
+                break;
+            }
+        }
+    }
+
+    function paint() {
+        var length = queueElement.childElementCount;
+        for (var i = 0; i < length; ++i) {
+            var node = queueElement.childNodes.item(i);
+            node.innerHTML = queue[i];
+        }
+    }
+</script>
+</body>
+</html>
