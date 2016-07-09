@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>没有土哥的讨论组</title>
+    <style>
+        body {
+            text-align: center;
+            padding-top: 200px;
+            font-family: "Microsoft YaHei UI";
+        }
+
+        .button {
+            background-color: snow;
+            border: 1px solid darkgray;
+            border-radius: 4px;
+            box-shadow: 0px 0px 2px darkgray;
+        }
+
+        .button:hover {
+            background-color: darkgray;
+        }
+
+        h2 {
+            -webkit-transition: padding-left 1s;
+            -moz-transition: padding-left 1s;
+            -ms-transition: padding-left 1s;
+            -o-transition: padding-left 1s;
+            transition: padding-left 1s;
+        }
+
+        h2:hover {
+            padding-left: 80px;
+        }
+
+        #queue {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        #queue div {
+            background-color: red;
+            color: #ffffff;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        .animate {
+            transition: height 2s;
+        }
+    </style>
+</head>
+<body>
+<h2>队列模拟</h2>
+<input type="text" id="input" value="">
+<input type="button" value="左侧入" class="button" onclick="enterLeft()">
+<input type="button" value="右侧入" class="button" onclick="enterRight()">
+<input type="button" value="左侧出" class="button" onclick="outLeft()">
+<input type="button" value="右侧出" class="button" onclick="outRight()">
+<input type="button" value="随机生成" class="button" onclick="randomCreate()">
+<input type="button" value="冒泡" class="button" onclick="bubbleSort()">
+<input type="button" value="选择" class="button" onclick="selectionSort()">
+<div id="queue"></div>
+<script>
+    var input = document.getElementById('input');
+    var queueElement = document.getElementById('queue');
+    var queue = [];
+
+    // 根据指定值返回数组下标
+    Array.prototype.indexOf = function (value) {
+        var length = queue.length;
+        for (var i = 0; i < length; i++) {
+            if (queue[i] == value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function randomCreate() {
+        clearQuequeElement();
+
+        for (var i = 0; i < 7; i++) {
+            var number = Math.ceil(Math.random() + 9) + Math.ceil(Math.random() * 90);
+            queue[i] = number;
+            createDiv(number);
+        }
+
+        paint();
+    }
+
+    function enterLeft() {
+        var number = input.value;
+        isOutRange();
+        if (isNumber(number)) {
+            if (number >= 10 && number <= 100) {
+                queue.splice(0, 0, number);
+                createDiv(number);
+            } else {
+                alert("请输入10-100之间的数字！");
+            }
+        }
+    }
+
+    function enterRight() {
+        var number = input.value;
+        isOutRange();
+        if (isNumber(number)) {
+            if (number >= 10 && number <= 100) {
+                queue.push(number);
+                createDiv(number);
+            } else {
+                alert("请输入10-100之间的数字！");
+            }
+        }
+    }
+
+    function outLeft() {
+        var number = queue.splice(0, 1);
+        alert(number);
+        removeDiv(number);
+    }
+
+    function outRight() {
+        var number = queue.pop();
+        alert(number);
+        removeDiv(number);
+    }
+
+    function isNumber(string) {
+        var pattern = /^\d+(\.\d+)*$/;
+        if (pattern.test(string)) {
+            return true;
+        } else {
+            alert("请输入数字！");
+            return false;
+        }
+    }
+
+    function isOutRange() {
+        if (queue.length > 60) {
+            alert("最多只能有60个元素！");
+        }
+    }
+
+    function createDiv(number) {
+        var div = document.createElement('div');
+        div.addEventListener('click', function () {
+            queueElement.removeChild(div);
+            var index = queue.indexOf(div.innerHTML);
+            queue.splice(index, 1);
+        }, false);
+
+        queueElement.appendChild(div);
+        paint();
+    }
+
+    function removeDiv(number) {
+        var length = queueElement.childElementCount;
+        for (var i = 0; i < length; ++i) {
+            var node = queueElement.childNodes.item(i);
+            if (node.innerHTML == number) {
+                queueElement.removeChild(node);
+                break;
+            }
+        }
+    }
+
+    function paint() {
+        var length = queueElement.childElementCount;
+        for (var i = 0; i < length; ++i) {
+            var node = queueElement.childNodes.item(i);
+            node.innerHTML = queue[i];
+            node.style.height = parseInt(node.innerHTML) * 2 + 'px';
+        }
+    }
+
+    function clearQuequeElement() {
+        var length = queueElement.childElementCount;
+        var node = queueElement.childNodes;
+        for (var i = 0; i < length; ++i) {
+            queueElement.removeChild(node.item(0));
+        }
+        paint();
+    }
+
+    // 交互节点
+    function swapNode(i, j) {
+        var node1 = queueElement.children[i],
+                node2 = queueElement.children[j],
+                heightTemp = node1.style.height;
+        node1.style.height = node2.style.height;
+        node2.style.height = heightTemp;
+        var innerHtmlTemp = node1.innerHTML;
+        node1.innerHTML = node2.innerHTML;
+        node2.innerHTML = innerHtmlTemp;
+        var temp = queue[i];
+        queue[i] = queue[j];
+        queue[j] = temp;
+    }
+
+    function bubbleSort() {
+        var length = queue.length,
+                delay = 100,
+                j = 0,
+                i = length - 1,
+                timer = setInterval(function () {
+                    if (i < 1) {
+                        clearInterval(timer);
+                    }
+                    if (j == i) {
+                        --i;
+                        j = 0;
+                    }
+                    if (queue[j] > queue[j + 1]) {
+                        swapNode(j, j + 1);
+                        console.log("alsdkjf")
+                    }
+                    ++j;
+                }, delay);
+    }
+
+    function selectionSort() {
+        var length = queue.length,
+                i = 0,
+                min = 0,
+                j = 1,
+                delay = 100,
+                timer = setInterval(function () {
+                    if (i == length - 1) {
+                        clearInterval(timer);
+                    }
+                    if (j == length) {
+                        swapNode(i, min);
+                        ++i;
+                        min = i;
+                        j = i + 1;
+                    }
+                    if (queue[j] && queue[j] < queue[min]) {
+                        min = j;
+                    }
+                    ++j;
+                }, delay);
+    }
+</script>
+</body>
+</html>
