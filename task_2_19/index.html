@@ -68,6 +68,7 @@
 <input type="button" value="随机生成" class="button" onclick="randomCreate()">
 <input type="button" value="冒泡" class="button" onclick="bubbleSort()">
 <input type="button" value="选择" class="button" onclick="selectionSort()">
+<input type="button" value="插入" class="button" onclick="insertionSort()">
 <div id="queue"></div>
 <script>
     var input = document.getElementById('input');
@@ -192,7 +193,7 @@
         paint();
     }
 
-    // 交互节点
+    // 交换节点
     function swapNode(i, j) {
         var node1 = queueElement.children[i],
                 node2 = queueElement.children[j],
@@ -209,7 +210,7 @@
 
     function bubbleSort() {
         var length = queue.length,
-                delay = 100,
+                delay = 50,
                 j = 0,
                 i = length - 1,
                 timer = setInterval(function () {
@@ -222,7 +223,6 @@
                     }
                     if (queue[j] > queue[j + 1]) {
                         swapNode(j, j + 1);
-                        console.log("alsdkjf")
                     }
                     ++j;
                 }, delay);
@@ -233,7 +233,7 @@
                 i = 0,
                 min = 0,
                 j = 1,
-                delay = 100,
+                delay = 50,
                 timer = setInterval(function () {
                     if (i == length - 1) {
                         clearInterval(timer);
@@ -248,6 +248,35 @@
                         min = j;
                     }
                     ++j;
+                }, delay);
+    }
+
+    function insertionSort() {
+        var length = queue.length,
+                i = 1,
+                j = 0,
+                delay = 50,
+                outer = true,
+                timer = setInterval(function () {
+                    if (i == length && outer) {
+                        clearInterval(timer);
+                    }
+                    if (outer) {
+                        if (queue[i] < queue[i - 1]) {
+                            j = i - 1;
+                            outer = false;
+                            swapNode(i, i - 1);
+                        }
+                        i++;
+                    }
+                    if (!outer) {
+                        if (j > 0 && queue[j] < queue[j - 1]) {
+                            swapNode(j, j - 1);
+                        } else {
+                            outer = true;
+                        }
+                        j--;
+                    }
                 }, delay);
     }
 </script>
