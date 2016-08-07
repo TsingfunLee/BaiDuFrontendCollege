@@ -89,7 +89,7 @@
     function randomCreate() {
         clearQuequeElement();
 
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < 20; i++) {
             var number = Math.ceil(Math.random() + 9) + Math.ceil(Math.random() * 90);
             queue[i] = number;
             createDiv(number);
@@ -102,8 +102,8 @@
         var number = input.value;
         isOutRange();
         if (isNumber(number)) {
-            if (number >= 10 && number <= 100) {
-                queue.splice(0, 0, number);
+            if (number > 10 && number < 100) {
+                queue.unshift(number);
                 createDiv(number);
             } else {
                 alert("请输入10-100之间的数字！");
@@ -115,7 +115,7 @@
         var number = input.value;
         isOutRange();
         if (isNumber(number)) {
-            if (number >= 10 && number <= 100) {
+            if (number > 10 && number < 100) {
                 queue.push(number);
                 createDiv(number);
             } else {
@@ -125,7 +125,7 @@
     }
 
     function outLeft() {
-        var number = queue.splice(0, 1);
+        var number = queue.shift();
         alert(number);
         removeDiv(number);
     }

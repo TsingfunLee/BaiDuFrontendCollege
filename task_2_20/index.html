@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务二十</title>
+    <style>
+        textarea {
+            resize: none;
+        }
+
+        #queue div {
+            background-color: cornflowerblue;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<textarea id="input" placeholder="请输入字符并用不同符号分隔"></textarea>
+<input type="button" value="左侧入">
+<input type="button" value="右侧入">
+<input type="text">
+<input type="button" value="查询">
+<div id="queue">
+
+</div>
+<script>
+    'use strict';
+    var queue = [],
+            inputs = document.getElementsByTagName('input'),
+            leftInsert = inputs[0],
+            rightInsert = inputs[1],
+            queryValue = inputs[2].value,
+            query = inputs[3],
+            input = document.getElementById('input').value.trim();
+
+    queue = input.split(/[^0-9a-zA-Z\u4e00-\u9fa5]+/).filter(
+            function (value) {
+                return value !== null && value.length > 0;
+            });
+
+    var render = function (match) {
+        document.getElementById('queue').innerHTML =
+                queue.map(function (value) {
+                    if (match != null && match.length > 0) {
+                        value = value.replace(new RegExp(match, "g"), "<span class='select'>" + match + "</span>");
+                    }
+                    return "<div>" + value + "</div>";
+                }).join('');
+    }
+</script>
+</body>
+</html>
