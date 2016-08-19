@@ -69,11 +69,13 @@
 <input type="button" value="冒泡" class="button" onclick="bubbleSort()">
 <input type="button" value="选择" class="button" onclick="selectionSort()">
 <input type="button" value="插入" class="button" onclick="insertionSort()">
+<input type="button" value="快速" class="button" onclick="quickSort()">
 <div id="queue"></div>
-<script>
+<script async defer>
     var input = document.getElementById('input');
     var queueElement = document.getElementById('queue');
     var queue = [];
+    var snapshot = [];
 
     // 根据指定值返回数组下标
     Array.prototype.indexOf = function (value) {
@@ -87,7 +89,7 @@
     }
 
     function randomCreate() {
-        clearQuequeElement();
+        clearQueueElement();
 
         for (var i = 0; i < 20; i++) {
             var number = Math.ceil(Math.random() + 9) + Math.ceil(Math.random() * 90);
@@ -95,7 +97,7 @@
             createDiv(number);
         }
 
-        paint();
+        paint(queue);
     }
 
     function enterLeft() {
@@ -161,7 +163,7 @@
         }, false);
 
         queueElement.appendChild(div);
-        paint();
+        paint(queue);
     }
 
     function removeDiv(number) {
@@ -175,7 +177,7 @@
         }
     }
 
-    function paint() {
+    function paint(queue) {
         var length = queueElement.childElementCount;
         for (var i = 0; i < length; ++i) {
             var node = queueElement.childNodes.item(i);
@@ -184,13 +186,13 @@
         }
     }
 
-    function clearQuequeElement() {
+    function clearQueueElement() {
         var length = queueElement.childElementCount;
         var node = queueElement.childNodes;
         for (var i = 0; i < length; ++i) {
             queueElement.removeChild(node.item(0));
         }
-        paint();
+        paint(queue);
     }
 
     // 交换节点
@@ -278,6 +280,59 @@
                         j--;
                     }
                 }, delay);
+    }
+
+    function quickSort() {
+        adjustArray(queue, 0, queue.length - 1);
+        var delay = 50;
+        var i = 0;
+        var timer = setInterval(function () {
+            paint(queue);
+            i++;
+
+            if (i === (snapshot.length - 1)) {
+                clearInterval(timer);
+            }
+        }, delay);
+    }
+
+    function adjustArray(queue, l, r) {
+        if (l < r) {
+            var i = l, j = r, x = queue[i];
+            queueElement.children[i].style.backgroundColor = 'green';
+            while (i < j) {
+                while (i < j && queue[j] >= x) {
+                    j--;
+                }
+                if (i < j) {
+                    takePosition(i, j);
+                }
+                while (i < j && queue[i] <= x) {
+                    i++;
+                }
+                if (i < j) {
+                    takePosition(j, i);
+                }
+            }
+            queue[i] = x;
+            adjustArray(queue, l, i - 1);
+            adjustArray(queue, j + 1, r);
+        }
+    }
+
+    function takePosition(i, j) {
+        queue[i] = queue[j];
+        var node1 = queueElement.children[i],
+                node2 = queueElement.children[j],
+                temp;
+        temp = node2.style.height;
+        node2.style.height = node1.style.height;
+        node1.style.height = temp;
+        temp = node2.innerHTML;
+        node2.innerHTML = node1.innerHTML;
+        node1.innerHTML = temp;
+        node1.style.backgroundColor = 'red';
+        node2.style.backgroundColor = 'red';
     }
 </script>
 </body>
