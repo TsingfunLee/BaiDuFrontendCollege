@@ -283,14 +283,16 @@
     }
 
     function quickSort() {
-        adjustArray(queue, 0, queue.length - 1);
+        adjustArray(queue,0,queue.length-1);
         var delay = 50;
         var i = 0;
         var timer = setInterval(function () {
-            paint(queue);
+            paint(snapshot[i]);
+            console.log('paint:'+snapshot[i]+' '+i)
             i++;
 
             if (i === (snapshot.length - 1)) {
+                snapshot=[];
                 clearInterval(timer);
             }
         }, delay);
@@ -299,22 +301,26 @@
     function adjustArray(queue, l, r) {
         if (l < r) {
             var i = l, j = r, x = queue[i];
-            queueElement.children[i].style.backgroundColor = 'green';
             while (i < j) {
                 while (i < j && queue[j] >= x) {
                     j--;
+                    addQueue(queue)
                 }
                 if (i < j) {
                     takePosition(i, j);
+                    addQueue(queue)
                 }
                 while (i < j && queue[i] <= x) {
                     i++;
+                    addQueue(queue)
                 }
                 if (i < j) {
                     takePosition(j, i);
+                    addQueue(queue)
                 }
             }
             queue[i] = x;
+            addQueue(queue)
             adjustArray(queue, l, i - 1);
             adjustArray(queue, j + 1, r);
         }
@@ -331,8 +337,11 @@
         temp = node2.innerHTML;
         node2.innerHTML = node1.innerHTML;
         node1.innerHTML = temp;
-        node1.style.backgroundColor = 'red';
-        node2.style.backgroundColor = 'red';
+    }
+
+    function addQueue(queue){
+        snapshot[snapshot.length]=queue;
+        console.log('snapshot:'+snapshot)
     }
 </script>
 </body>
