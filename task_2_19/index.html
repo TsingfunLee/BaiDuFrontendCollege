@@ -61,21 +61,70 @@
 <body>
 <h2>队列模拟</h2>
 <input type="text" id="input" value="">
-<input type="button" value="左侧入" class="button" onclick="enterLeft()">
-<input type="button" value="右侧入" class="button" onclick="enterRight()">
-<input type="button" value="左侧出" class="button" onclick="outLeft()">
-<input type="button" value="右侧出" class="button" onclick="outRight()">
-<input type="button" value="随机生成" class="button" onclick="randomCreate()">
-<input type="button" value="冒泡" class="button" onclick="bubbleSort()">
-<input type="button" value="选择" class="button" onclick="selectionSort()">
-<input type="button" value="插入" class="button" onclick="insertionSort()">
-<input type="button" value="快速" class="button" onclick="quickSort()">
+<input type="button" value="左侧入" class="button" name="leftEnter">
+<input type="button" value="右侧入" class="button" name="rightEnter">
+<input type="button" value="左侧出" class="button" name="leftOut">
+<input type="button" value="右侧出" class="button" name="rightOut">
+<input type="button" value="随机生成" class="button" name="randomGenerate">
+<input type="button" value="冒泡" class="button" name="bubble">
+<input type="button" value="选择" class="button" name="selection">
+<input type="button" value="插入" class="button" name="insertion">
+<input type="button" value="快速" class="button" name="quick">
 <div id="queue"></div>
 <script async defer>
     var input = document.getElementById('input');
     var queueElement = document.getElementById('queue');
     var queue = [];
     var snapshot = [];
+
+    // 给body父元素绑定事件
+    (function listenEvent() {
+        var body = document.getElementsByTagName('body')[0];
+        addEventHandler(body, 'click', function (e) {
+            if (e.target) {
+                switch (e.target.name) {
+                    case 'leftEnter':
+                        enterLeft();
+                        break;
+                    case 'rightEnter':
+                        enterRight();
+                        break;
+                    case 'leftOut':
+                        outLeft();
+                        break;
+                    case 'rightOut':
+                        outRight();
+                        break;
+                    case 'randomGenerate':
+                        randomCreate();
+                        break;
+                    case 'bubble':
+                        bubbleSort();
+                        break;
+                    case 'selection':
+                        selectionSort();
+                        break;
+                    case 'insertion':
+                        insertionSort();
+                        break;
+                    case 'quick':
+                        quickSort();
+                        break;
+                }
+            }
+        });
+    })();
+
+    // 用于给元素绑定事件，解决浏览器兼容问题
+    function addEventHandler(element, event, fun) {
+        if (element.addEventListener) {
+            element.addEventListener(event, fun, false);
+        } else if (element.attachEvent) { // 兼容IE
+            element.attachEvent('on' + event, fun)
+        } else {
+            element['on' + event] = fun;
+        }
+    }
 
     // 根据指定值返回数组下标
     Array.prototype.indexOf = function (value) {
@@ -178,11 +227,10 @@
     }
 
     function paint(queue) {
-        var length = queueElement.childElementCount;
-        for (var i = 0; i < length; ++i) {
+        for (var i = 0, length = queueElement.childElementCount; i < length; ++i) {
             var node = queueElement.childNodes.item(i);
             node.innerHTML = queue[i];
-            node.style.height = parseInt(node.innerHTML) * 2 + 'px';
+            node.style.height = parseInt(queue[i]) * 2 + 'px';
         }
     }
 
@@ -197,14 +245,19 @@
 
     // 交换节点
     function swapNode(i, j) {
+        // 克隆节点到内存中进行操作以减少重绘
         var node1 = queueElement.children[i],
                 node2 = queueElement.children[j],
-                heightTemp = node1.style.height;
-        node1.style.height = node2.style.height;
-        node2.style.height = heightTemp;
-        var innerHtmlTemp = node1.innerHTML;
-        node1.innerHTML = node2.innerHTML;
-        node2.innerHTML = innerHtmlTemp;
+                clone1 = node1.cloneNode(true),
+                clone2 = node2.cloneNode(true),
+                heightTemp = clone1.style.height;
+        clone1.style.height = clone2.style.height;
+        clone2.style.height = heightTemp;
+        var innerHtmlTemp = clone1.innerHTML;
+        clone1.innerHTML = clone2.innerHTML;
+        clone2.innerHTML = innerHtmlTemp;
+        node1.parentNode.replaceChild(clone1, node1);
+        node2.parentNode.replaceChild(clone2, node2);
         var temp = queue[i];
         queue[i] = queue[j];
         queue[j] = temp;
@@ -327,21 +380,13 @@
 
     function takePosition(i, j) {
         queue[i] = queue[j];
-        var node1 = queueElement.children[i],
-                node2 = queueElement.children[j],
-                temp;
-        temp = node2.style.height;
-        node2.style.height = node1.style.height;
-        node1.style.height = temp;
-        temp = node2.innerHTML;
-        node2.innerHTML = node1.innerHTML;
-        node1.innerHTML = temp;
     }
 
     function addQueue(queue) {
-        snapshot[snapshot.length] = [];
+        var snapshotLength=snapshot.length;
+        snapshot[snapshotLength] = [];
         for (var i = 0, length = queue.length; i < length; i++) {
-            snapshot[snapshot.length - 1][i] = queue[i];
+            snapshot[snapshotLength][i] = queue[i];
         }
     }
 </script>
