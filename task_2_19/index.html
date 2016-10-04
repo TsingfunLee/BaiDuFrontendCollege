@@ -45,6 +45,7 @@
         }
 
         #queue div {
+            cursor: default;
             background-color: red;
             color: #ffffff;
             font-size: 12px;
@@ -66,6 +67,7 @@
 <input type="button" value="左侧出" class="button" name="leftOut">
 <input type="button" value="右侧出" class="button" name="rightOut">
 <input type="button" value="随机生成" class="button" name="randomGenerate">
+<input type="button" value="清空" class="button" name="clear">
 <input type="button" value="冒泡" class="button" name="bubble">
 <input type="button" value="选择" class="button" name="selection">
 <input type="button" value="插入" class="button" name="insertion">
@@ -97,6 +99,9 @@
                         break;
                     case 'randomGenerate':
                         randomCreate();
+                        break;
+                    case 'clear':
+                        clearQueueElement();
                         break;
                     case 'bubble':
                         bubbleSort();
@@ -243,31 +248,12 @@
         paint(queue);
     }
 
-    // 交换节点
-    function swapNode(i, j) {
-        // 克隆节点到内存中进行操作以减少重绘
-        var node1 = queueElement.children[i],
-                node2 = queueElement.children[j],
-                clone1 = node1.cloneNode(true),
-                clone2 = node2.cloneNode(true),
-                heightTemp = clone1.style.height;
-        clone1.style.height = clone2.style.height;
-        clone2.style.height = heightTemp;
-        var innerHtmlTemp = clone1.innerHTML;
-        clone1.innerHTML = clone2.innerHTML;
-        clone2.innerHTML = innerHtmlTemp;
-        node1.parentNode.replaceChild(clone1, node1);
-        node2.parentNode.replaceChild(clone2, node2);
-        var temp = queue[i];
-        queue[i] = queue[j];
-        queue[j] = temp;
-    }
-
     function bubbleSort() {
-        for (var i = 0, length = queue.length; i < length - 1; i++) {
-            for (var j = 1; j < length - i; j++) {
+        var i, j, temp, length = queue.length;
+        for (i = 0; i < length - 1; i++) {
+            for (j = 1; j < length - i; j++) {
                 if (queue[j - 1] > queue[j]) {
-                    var temp = queue[j - 1];
+                    temp = queue[j - 1];
                     queue[j - 1] = queue[j];
                     queue[j] = temp;
                 }
@@ -275,118 +261,51 @@
             }
         }
 
-        var delay = 50;
-        var i = 0;
-        var timer = setInterval(function () {
-            paint(snapshot[i]);
-            i++;
-
-            if (i === (snapshot.length - 1)) {
-                snapshot = [];
-                clearInterval(timer);
-            }
-        }, delay);
-//        var length = queue.length,
-//                delay = 50,
-//                j = 0,
-//                i = length - 1,
-//                timer = setInterval(function () {
-//                    if (i < 1) {
-//                        clearInterval(timer);
-//                    }
-//                    if (j == i) {
-//                        --i;
-//                        j = 0;
-//                    }
-//                    if (queue[j] > queue[j + 1]) {
-//                        swapNode(j, j + 1);
-//                    }
-//                    ++j;
-//                }, delay);
+        paintInterval();
     }
 
     function selectionSort() {
-        for (var i = 0, length = queue.length; i < length; i++) {
-            var min = i;
-            for (var j = i, length = queue.length; j < length; j++) {
+        var min, temp, i, j, length = queue.length;
+        for (i = 0; i < length; i++) {
+            min = i;
+            for (j = i; j < length; j++) {
                 if (queue[min] > queue[j + 1]) {
                     min = j + 1;
                 }
                 addQueue(queue)
             }
-            var temp = queue[i];
+            temp = queue[i];
             queue[i] = queue[min];
             queue[min] = temp;
-            addQueue(queue)
+            addQueue(queue);
         }
 
         paintInterval();
-
-
-//        var length = queue.length,
-//                i = 0,
-//                min = 0,
-//                j = 1,
-//                delay = 50,
-//                timer = setInterval(function () {
-//                    if (i == length - 1) {
-//                        clearInterval(timer);
-//                    }
-//                    if (j == length) {
-//                        swapNode(i, min);
-//                        ++i;
-//                        min = i;
-//                        j = i + 1;
-//                    }
-//                    if (queue[j] && queue[j] < queue[min]) {
-//                        min = j;
-//                    }
-//                    ++j;
-//                }, delay);
     }
 
     function insertionSort() {
-        var length = queue.length,
-                i = 1,
-                j = 0,
-                delay = 50,
-                outer = true,
-                timer = setInterval(function () {
-                    if (i == length && outer) {
-                        clearInterval(timer);
-                    }
-                    if (outer) {
-                        if (queue[i] < queue[i - 1]) {
-                            j = i - 1;
-                            outer = false;
-                            swapNode(i, i - 1);
-                        }
-                        i++;
-                    }
-                    if (!outer) {
-                        if (j > 0 && queue[j] < queue[j - 1]) {
-                            swapNode(j, j - 1);
-                        } else {
-                            outer = true;
-                        }
-                        j--;
-                    }
-                }, delay);
+        var i, j;
+        var temp;
+        var length = queue.length;
+        for (i = 1; i < length; i++) {
+            temp = queue[i];
+            addQueue(queue);
+            for (j = i - 1; j >= 0 && queue[j] > temp; j--){
+                queue[j + 1] = queue[j];
+                addQueue(queue);
+            }
+
+            queue[j + 1] = temp;
+            addQueue(queue);
+        }
+
+        paintInterval();
     }
 
     function quickSort() {
         adjustArray(queue, 0, queue.length - 1);
-        var delay = 50;
-        var i = 0;
-        var timer = setInterval(function () {
-            paint(snapshot[i]);
-            i++;
 
-            if (i === (snapshot.length - 1)) {
-                snapshot = [];
-                clearInterval(timer);
-            }
-        }, delay);
+        paintInterval();
     }
 
     function adjustArray(queue, l, r) {
